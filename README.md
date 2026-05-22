@@ -1,128 +1,103 @@
-# Network Guardian 🛡️
-**A Python-based real-time packet sniffer with anomaly detection**
+# 🛡️ Network Guardian — Real-Time Threat Detection & Packet Analysis System
 
-> Built by Sarthak Khaiwal | [GitHub](https://github.com/Sarthak106)
+Network Guardian is a real-time network traffic monitoring and packet analysis tool built in Python. It captures live packets, analyzes network protocols, detects suspicious activity, logs security alerts, and exports PCAP files for forensic analysis. The system also includes a live dashboard for visualization and monitoring. It simulates SOC-style (Security Operations Center) network monitoring and demonstrates practical cybersecurity, networking, and packet inspection skills.
 
----
+## 🚀 Features
+- 🔴 Real-time packet sniffing (TCP/UDP/ICMP)  
+- 🌐 DNS traffic monitoring  
+- 📡 HTTP payload inspection  
+- 🚨 Suspicious port detection  
+- 🕵️ Port scan detection  
+- 📝 Automated alert logging system  
+- 📁 PCAP file export for forensic analysis  
+- 📊 Live Streamlit dashboard  
+- 📈 Protocol-based traffic statistics  
+- 🔄 Real-time network monitoring  
 
-## Features
+## 🛠️ Tech Stack
+- Python  
+- :contentReference[oaicite:0]{index=0}  
+- Socket Programming  
+- :contentReference[oaicite:1]{index=1}  
+- Matplotlib  
+- Pandas  
+- Colorama  
+- TCP/IP Networking  
 
-| Feature | Details |
-|---|---|
-| **Real-time capture** | Captures live TCP, UDP, ICMP, ARP, DNS packets |
-| **Protocol filtering** | Filter by protocol via CLI flag |
-| **Anomaly detection** | Port scan, ICMP flood, NULL scan, XMAS scan |
-| **Suspicious ports** | Flags traffic to SSH, RDP, SMB, Metasploit ports |
-| **Live statistics** | Protocol breakdown, top IPs, packets/sec |
-| **JSON logging** | All packets and alerts saved in JSONL format |
-| **Hex payload dump** | Verbose mode shows raw packet payload |
+## 📂 Project Structure
+NetworkGuardian/  
+├── main.py — Packet sniffer & threat detection engine  
+├── dashboard.py — Streamlit monitoring dashboard  
+├── logs/  
+│   ├── alerts.txt — Security alerts log  
+│   └── stats.txt — Protocol statistics  
+├── captures/  
+│   └── network_traffic.pcap — Captured packets (PCAP file)  
+└── README.md  
 
----
+## ⚙️ Installation
+Clone repository:  
+git clone https://github.com/Sarthak106/network-guardian.git  
+cd network-guardian  
 
-## Project Structure
+Create virtual environment (optional):  
+python -m venv venv  
 
-```
-network_guardian/
-├── main.py          # CLI entry point (argparse)
-├── sniffer.py       # Core capture engine (Scapy)
-├── analyzer.py      # Packet analysis + anomaly detection
-├── logger.py        # JSON file logging
-├── display.py       # Colored terminal output
-├── requirements.txt
-└── README.md
-```
+Activate:  
+Windows: venv\Scripts\activate  
+Linux/Mac: source venv/bin/activate  
 
----
+Install dependencies:  
+pip install -r requirements.txt  
 
-## Setup
+## 📦 Requirements
+scapy  
+streamlit  
+matplotlib  
+pandas  
+colorama  
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/Sarthak106/network-guardian
-cd network-guardian
+## 🖥️ Npcap Installation (Windows Only)
+Install Npcap: https://npcap.com/#download  
+Enable: WinPcap API compatibility mode  
 
-# 2. Install dependencies (Python 3.10+)
-pip install -r requirements.txt
+## ▶️ How to Run
+Start Sniffer:  
+python main.py  
 
-# 3. Run (requires root for raw socket access)
-sudo python main.py
-```
+Start Dashboard:  
+streamlit run dashboard.py  
 
----
+## 🔍 Packet Filtering Examples
+python main.py --filter tcp  
+python main.py --filter udp  
+python main.py --filter icmp  
+python main.py --filter "port 443"  
 
-## Usage Examples
+## 🚨 Threat Detection Capabilities
+Network Guardian detects: suspicious port access (21, 22, 23, 4444), port scanning behavior, DNS queries, HTTP payload activity, and unusual network patterns.
 
-```bash
-# Capture all traffic (unlimited)
-sudo python main.py
+## 📊 Dashboard Features
+Live security alerts, protocol distribution charts, packet statistics overview, PCAP monitoring, and real-time system status.
 
-# Capture only TCP on interface eth0
-sudo python main.py -i eth0 -f tcp
+## 📁 PCAP Analysis
+Captured traffic can be analyzed using Wireshark and tcpdump.
 
-# Capture 200 packets and save to log
-sudo python main.py -c 200 -o session.json
+## 📸 Sample Output
+[12:04:01] [TCP] 192.168.1.5:443 -> 172.26.89.87:57902  
+[DNS] 192.168.1.5 requested: google.com  
+[ALERT] Possible Port Scan Detected from 192.168.1.10  
 
-# Enable anomaly/port-scan detection
-sudo python main.py --detect-anomalies
+## 📈 Future Enhancements
+GeoIP tracking, machine learning anomaly detection, DDoS detection, SQLite logging, SIEM integration, and live packet table UI.
 
-# Verbose mode: show raw payload hex dump
-sudo python main.py --verbose
+## 🎯 Learning Outcomes
+Network packet analysis, TCP/IP protocol understanding, cybersecurity monitoring, threat detection, SOC-style workflows, Python automation, and real-time data processing.
 
-# Full options
-sudo python main.py -i wlan0 -f tcp -c 500 -o capture.json --detect-anomalies --verbose
-```
+## 👨‍💻 Author
+Sarthak Khaiwal  
+GitHub: https://github.com/Sarthak106  
+LinkedIn: https://linkedin.com/in/sarthakkhaiwal 
 
----
-
-## Anomaly Detection
-
-Network Guardian detects the following attack patterns:
-
-| Detection | Trigger |
-|---|---|
-| **Port Scan** | One IP hits ≥ 15 unique ports within 60 seconds |
-| **ICMP Flood** | One IP sends > 20 ICMP packets within 5 seconds |
-| **NULL Scan** | TCP packet with zero flags (stealth OS fingerprinting) |
-| **XMAS Scan** | TCP packet with FIN + PSH + URG set (Nmap evasion) |
-| **Suspicious Ports** | Traffic to SSH, Telnet, RDP, SMB, Metasploit, Redis, etc. |
-
----
-
-## Sample Output
-
-```
-20:14:33  TCP     192.168.1.5:54321     → 142.250.80.46:443       1420 B [SYN ACK]
-20:14:33  UDP     192.168.1.5:55302     → 8.8.8.8:53               78 B
-20:14:34  ICMP    192.168.1.1           → 192.168.1.5              84 B [type=0 code=0]
-
-⚠  ALERT  ⚠   PORT SCAN DETECTED | Source: 10.0.0.23 hit 17 unique ports in 60s
-```
-
----
-
-## Log Format (JSONL)
-
-Each line in the output file is a valid JSON object:
-```json
-{"type": "PACKET", "timestamp": "20:14:33", "protocol": "TCP", "src_ip": "192.168.1.5", "dst_ip": "142.250.80.46", "src_port": 54321, "dst_port": 443, "length": 1420, "flags": "SYN ACK", "payload_hex": null}
-{"type": "ALERT",  "timestamp": "20:14:40", "message": "PORT SCAN DETECTED | Source: 10.0.0.23 hit 17 unique ports in 60s", "src_ip": "10.0.0.23"}
-```
-
----
-
-## Skills Demonstrated
-
-- **Python** — OOP, threading, file I/O, argparse, ANSI formatting
-- **Scapy** — raw socket capture, BPF filters, packet layer inspection
-- **Network Protocols** — TCP/IP, UDP, ICMP, ARP, DNS
-- **Security Concepts** — port scanning, ICMP floods, NULL/XMAS scans
-- **Software Design** — modular architecture, separation of concerns
-
----
-
-## Requirements
-
-- Python 3.10+
-- Root / Administrator privileges (raw socket access)
-- Linux or macOS recommended (Kali Linux ideal)
-- `scapy==2.5.0`
+## 📜 License
+MIT License
