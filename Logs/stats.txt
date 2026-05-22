@@ -1,0 +1,4 @@
+TCP:2515
+UDP:2
+ICMP:0
+DNS:2
